@@ -17,21 +17,32 @@
         $(function () {
             //点击更换验证码：
             $("#captchaImage").click(function () {//点击更换验证码
-                alert("自己做");
+                $("#captchaImage").prop("src", "${pageContext.request.contextPath }/admin/code?time=" + new Date());
             });
 
             //  form 表单提交
-            $("#loginForm").bind("submit", function () {
-                alert("自己做");
-                return false;
+            $("#in1").click(function () {
+                var name = $("#na").val();
+                var password = $("#pass").val();
+                var code = $("#enCode").val();
+                $.post("${pageContext.request.contextPath}/admin/queryOne", "name=" + name + "&password=" + password + "&code=" + code, function (result) {
+                    if (result == "ok") {
+                        $("form")[0].submit();
+
+                    } else {
+                        $("#s1").html(result);
+
+                    }
+                });
             });
+
         });
     </script>
 </head>
 <body>
 
 <div class="login">
-    <form id="loginForm" action="../back/index.html" method="post">
+    <form id="loginForm" action="${pageContext.request.contextPath}/main/main.jsp" method="post">
 
         <table>
             <tbody>
@@ -43,7 +54,7 @@
                     用户名:
                 </th>
                 <td>
-                    <input type="text" name="user.name" class="text" value="xxx" maxlength="20"/>
+                    <input type="text" name="name" id="na" class="text" maxlength="20"/>
                 </td>
             </tr>
             <tr>
@@ -51,7 +62,7 @@
                     密&nbsp;&nbsp;&nbsp;码:
                 </th>
                 <td>
-                    <input type="password" name="user.password" class="text" value="xxx" maxlength="20"
+                    <input type="password" name="password" id="pass" class="text" maxlength="20"
                            autocomplete="off"/>
                 </td>
             </tr>
@@ -61,7 +72,8 @@
                 <th>验证码:</th>
                 <td>
                     <input type="text" id="enCode" name="enCode" class="text captcha" maxlength="4" autocomplete="off"/>
-                    <img id="captchaImage" class="captchaImage" src="img/captcha.jpg" title="点击更换验证码"/>
+                    <img id="captchaImage" class="captchaImage" src="${pageContext.request.contextPath}/admin/code"
+                         title="点击更换验证码"/>
                 </td>
             </tr>
             <tr>
@@ -76,7 +88,8 @@
                 <td>&nbsp;</td>
                 <th>&nbsp;</th>
                 <td>
-                    <input type="button" class="homeButton" value="" onclick="location.href='/'"><input type="submit"
+                    <input type="button" class="homeButton" value="" onclick="location.href='/'"><input id="in1"
+                                                                                                        type="button"
                                                                                                         class="loginButton"
                                                                                                         value="登录">
                 </td>

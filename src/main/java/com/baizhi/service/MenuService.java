@@ -1,9 +1,9 @@
-package com.baizhi.mapper;
+package com.baizhi.service;
 
 import com.baizhi.entity.Menu;
 
 import java.util.List;
 
-public interface MenuDao {
+public interface MenuService {
     public List<Menu> queryAll();
 }

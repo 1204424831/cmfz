@@ -21,3 +21,4 @@ spring:
       charset: UTF-8
 mybatis:
   type-aliases-package: com.baizhi.entity
+  mapper-locations: classpath:com/baizhi.mapper/*Mapper.xml
