@@ -22,6 +22,7 @@ public class ChapterController {
     @Autowired
     private ChapterService chapterService;
 
+
     @RequestMapping("/insertOne")
     public void insertOne(Chapter c, HttpSession session, MultipartFile file1) throws IOException {
         System.out.println(c + "------");
