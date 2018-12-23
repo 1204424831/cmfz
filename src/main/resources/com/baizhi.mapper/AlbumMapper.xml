@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.mapper.AlbumDao">
+    <resultMap id="res1" type="com.baizhi.entity.Album">
+        <id column="aid" property="id"/>
+        <result column="atitle" property="title"></result>
+        <result column="count" property="count"></result>
+        <result column="cover_img" property="coverImg"></result>
+        <result column="score" property="score"></result>
+        <result column="author" property="author"></result>
+        <result column="broadcast" property="broadcast"></result>
+        <result column="brief" property="brief"></result>
+        <result column="put_date" property="putDate"></result>
+        <collection property="children" ofType="com.baizhi.entity.Chapter">
+            <id column="cid" property="id"/>
+            <result column="ctitle" property="title"></result>
+            <result column="size" property="size"></result>
+            <result column="duration" property="duration"></result>
+            <result column="url" property="url"></result>
+            <result column="upload_date" property="uploadDate"></result>
+        </collection>
+    </resultMap>
+
+
+    <select id="querySomAlbum" resultMap="res1">
+        select a.id    aid,
+               a.title atitle,
+               a.count,
+               a.cover_img,
+               a.score,
+               a.author,
+               a.broadcast,
+               a.brief,
+               a.put_date,
+               c.id    cid,
+               c.title ctitle,
+               c.size,
+               c.duration,
+               c.url,
+               c.upload_date
+        from (select *
+              from album limit
+                   ${(page-1)*rows},
+                   ${rows}) a
+                 left join chapter c on a.id = c.album_id
+        order by a.id desc
+    </select>
+</mapper>

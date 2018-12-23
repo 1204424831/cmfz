@@ -19,6 +19,12 @@ spring:
     encoding:
       force: true
       charset: UTF-8
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 mybatis:
   type-aliases-package: com.baizhi.entity
   mapper-locations: classpath:com/baizhi.mapper/*Mapper.xml
