@@ -9,4 +9,5 @@ import java.util.List;
 public interface AlbumDao extends Mapper<Album> {
     public List<Album> querySomAlbum(@Param("rows") Integer rows, @Param("page") Integer page);
 
+    public List<Album> queryAllAlbum();
 }

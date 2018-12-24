@@ -45,7 +45,7 @@
         handler: function () {
             var row = $('#album').treegrid("getSelected");
             if (row != null && row.author == null) {
-                location.href = "${pageContext.request.contextPath}/chapter/download?id=" + row.id;
+                location.href = "${pageContext.request.contextPath}/chapter/download?url=" + row.url + "&title=" + row.title;
             } else {
                 $.messager.show({
                     title: "标题",
@@ -53,6 +53,30 @@
                 });
             }
 
+        }
+    }, '-', {
+        text: "数据导出",
+        iconCls: 'icon-save',
+        handler: function () {
+            $.get("${pageContext.request.contextPath}/album/out", function (result) {
+                $.messager.show({
+                    title: "标题",
+                    msg: "导出成功！"
+                });
+            });
+
+        }
+    }, '-', {
+        text: "数据导入",
+        iconCls: 'icon-save',
+        handler: function () {
+
+            $.get("${pageContext.request.contextPath}/album/init", function (result) {
+                $.messager.show({
+                    title: "标题",
+                    msg: "导入成功！"
+                });
+            });
         }
     }]
 

@@ -45,4 +45,24 @@
                  left join chapter c on a.id = c.album_id
         order by a.id desc
     </select>
+    <select id="queryAllAlbum" resultMap="res1">
+        select a.id    aid,
+               a.title atitle,
+               a.count,
+               a.cover_img,
+               a.score,
+               a.author,
+               a.broadcast,
+               a.brief,
+               a.put_date,
+               c.id    cid,
+               c.title ctitle,
+               c.size,
+               c.duration,
+               c.url,
+               c.upload_date
+        from album a
+                 left join chapter c on a.id = c.album_id
+        order by a.id desc
+    </select>
 </mapper>

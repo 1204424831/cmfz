@@ -2,8 +2,9 @@ package com.baizhi.controller;
 
 import com.baizhi.entity.Chapter;
 import com.baizhi.service.ChapterService;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/chapter")
@@ -24,14 +27,26 @@ public class ChapterController {
 
 
     @RequestMapping("/insertOne")
-    public void insertOne(Chapter c, HttpSession session, MultipartFile file1) throws IOException {
+    public void insertOne(Chapter c, HttpSession session, MultipartFile file1) {
         System.out.println(c + "------");
         ServletContext ctx = session.getServletContext();
         String realPath = ctx.getRealPath("/image/mp3");
-        // 目标文件
-        File descFile = new File(realPath + "/" + file1.getOriginalFilename());
+        File file = new File(realPath);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        String oldName = file1.getOriginalFilename();
+        //获取文件后缀
+        String extension = FilenameUtils.getExtension(oldName);
+        String newName = UUID.randomUUID().toString();
+        //用UUID表示唯一的专辑
+        newName = newName + "." + extension;
         // 上传
-        file1.transferTo(descFile);
+        try {
+            file1.transferTo(new File(realPath, newName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String size = null;
         Long a = file1.getSize();
         if (a < 1024) {
@@ -44,23 +59,39 @@ public class ChapterController {
             size = a / 1024 / 1024 / 1024 + "GB";
         }
         c.setSize(size);
-        c.setUrl("/image/mp3/" + file1.getOriginalFilename());
+        c.setUrl("/image/mp3/" + newName);
+
         chapterService.insetOne(c);
     }
 
     @RequestMapping("/download")
-    public void download(String id, HttpSession session, HttpServletResponse response) throws IOException {
-        Chapter c = chapterService.getOne(id);
-        String realPath = session.getServletContext().getRealPath(c.getUrl());
-        System.out.println(c.getUrl() + "-------------");
+    public void download(String url, String title, HttpSession session, HttpServletResponse response) {
+
+        String realPath = session.getServletContext().getRealPath(url);
         File f = new File(realPath);
-        byte[] bs = FileCopyUtils.copyToByteArray(f);
-        String[] name = c.getUrl().split("/");
-        String a = name[3];
-        System.out.println(a);
-        response.setHeader("content-disposition", "attchment;filename=" + URLEncoder.encode(a, "utf-8"));
-        ServletOutputStream out = response.getOutputStream();
-        out.write(bs);
+        String extension = FilenameUtils.getExtension(url);
+        String oldName = title + "." + extension;
+        byte[] bs = new byte[0];
+        try {
+            bs = FileUtils.readFileToByteArray(f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            response.setHeader("content-disposition", "attchment;filename=" + URLEncoder.encode(oldName, "utf-8"));
+            //响应返回值类型
+            response.setContentType("audio/mpeg");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        ServletOutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            out.write(bs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

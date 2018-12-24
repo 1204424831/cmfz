@@ -32,4 +32,8 @@ public class AlbumServiceImpl implements AlbumService {
     public void insertOne(Album a) {
         albumDao.insert(a);
     }
+
+    public List<Album> queryAll() {
+        return albumDao.queryAllAlbum();
+    }
 }
