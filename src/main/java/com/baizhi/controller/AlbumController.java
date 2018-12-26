@@ -7,6 +7,7 @@ import cn.afterturn.easypoi.excel.entity.ImportParams;
 import com.baizhi.entity.Album;
 import com.baizhi.entity.AlbumMessage;
 import com.baizhi.service.AlbumService;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,14 +75,15 @@ public class AlbumController {
     public void initExport() {
         ImportParams params = new ImportParams();
         params.setTitleRows(1);
-        params.setHeadRows(1);
+        params.setHeadRows(2);
         //params.setSheetNum(9);
         params.setNeedSave(true);
         long start = new Date().getTime();
-        List<Album> list = ExcelImportUtil.importExcel(new File(
+        List<Album> result = ExcelImportUtil.importExcel(new File(
                 "D:/easypoi.xls"), Album.class, params);
-        for (Album a : list) {
-            System.out.println(a);
+        for (int i = 0; i < result.size(); i++) {
+            System.out.println(ReflectionToStringBuilder.toString(result.get(i)));
         }
+
     }
 }

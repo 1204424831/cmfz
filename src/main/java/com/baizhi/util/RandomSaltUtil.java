@@ -31,4 +31,5 @@ public class RandomSaltUtil {
         }
         return sb.toString();
     }
+
 }
