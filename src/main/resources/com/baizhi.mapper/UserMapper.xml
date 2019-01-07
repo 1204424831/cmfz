@@ -6,21 +6,24 @@
     <![CDATA[
         select count(*)
         from user
-        where datediff(now(), reg_date) < 7;
+        where datediff(now(), reg_date) < 7
+          and status = 'y';
         ]]>
     </select>
     <select id="querySecondWeek" resultType="java.lang.Integer">
     <![CDATA[
         select count(*)
         from user
-        where datediff(now(), reg_date) < 14;
+        where datediff(now(), reg_date) < 14
+          and status = 'y';
         ]]>
     </select>
     <select id="queryThreedWeek" resultType="java.lang.Integer">
     <![CDATA[
         select count(*)
         from user
-        where datediff(now(), reg_date) < 21;
+        where datediff(now(), reg_date) < 21
+          and status = 'y';
         ]]>
     </select>
     <select id="queryProvince" resultType="com.baizhi.entity.Province">
@@ -31,13 +34,44 @@
     <select id="queryProMan" resultType="com.baizhi.entity.Province">
         select province name,count(*) value
         from user
-        where sex='男'
+        where sex='男' and status='y'
         group by province;
     </select>
     <select id="queryProWom" resultType="com.baizhi.entity.Province">
         select province name,count(*) value
         from user
-        where sex='女'
+        where sex='女' and status='y'
         group by province;
+    </select>
+    <select id="queryOneUser" parameterType="java.lang.String" resultType="com.baizhi.entity.User1">
+        select password,
+               dharma   farmington,
+               id       uid,
+               name     nickname,
+               sex      gender,
+               head_pic photo,
+               province,
+               city,
+               sign     description,
+               phone
+        from user
+        where phone = #{phone}
+    </select>
+    <select id="queryOneUser1" parameterType="java.lang.String" resultType="com.baizhi.entity.User2">
+        select password,id uid,phone
+        from user
+        where phone = #{phone}
+    </select>
+    <select id="queryFiveUser" resultType="com.baizhi.entity.User3">
+        select dharma   farmington,
+               name     nickname,
+               sex      gender,
+               head_pic photo,
+               province,
+               city,
+               sign     description,
+               phone
+        from user
+        order by rand() limit 5
     </select>
 </mapper>

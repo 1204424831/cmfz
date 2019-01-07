@@ -29,5 +29,8 @@
         from banner
         order by id desc limit ${(page-1)*rows},${rows}
     </select>
-
+    <select id="queryAll" resultType="com.baizhi.entity.Banner1">
+        select img_path thumbnail,title desc1,id
+        from banner
+    </select>
 </mapper>

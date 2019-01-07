@@ -25,6 +25,24 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  redis:
+    database: 0
+    host: 192.168.199.134
+    port: 7000
+    pool:
+      max-active: 8
+      max-wait: -1
+      min-idle: 0
+      max-idle: 8
+    timeout: 0
 mybatis:
   type-aliases-package: com.baizhi.entity
   mapper-locations: classpath:com/baizhi.mapper/*Mapper.xml
+fdfs:
+  so-timeout: 1501
+  connect-timeout: 601
+  thumb-image:
+    width: 150
+    height: 150
+  tracker-list:
+    - 192.168.199.135:22122

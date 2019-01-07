@@ -65,4 +65,33 @@
                  left join chapter c on a.id = c.album_id
         order by a.id desc
     </select>
+    <select id="queryAllAlb" resultType="com.baizhi.entity.StuMess">
+        select cover_img thumbnail,
+               title,
+               author,
+               count     set_count,
+               put_date  create_date
+        from album
+    </select>
+    <select id="querySomeAlb" resultType="com.baizhi.entity.StuMess">
+        select cover_img thumbnail,
+               title,
+               author,
+               count     set_count,
+               put_date  create_date
+        from album
+        order by put_date desc limit 0,6
+    </select>
+    <select id="queryOneAlb" parameterType="java.lang.Integer" resultType="com.baizhi.entity.Album1">
+        select cover_img thumbnail,
+               title,
+               score,
+               author,
+               broadcast,
+               count     set_count,
+               brief,
+               put_date  create_date
+        from album
+        where id = #{id}
+    </select>
 </mapper>

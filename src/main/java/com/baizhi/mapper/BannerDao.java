@@ -1,6 +1,7 @@
 package com.baizhi.mapper;
 
 import com.baizhi.entity.Banner;
+import com.baizhi.entity.Banner1;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface BannerDao {
     public void insertOne(Banner b);
 
     public Integer getCount();
+
+    public List<Banner1> queryAll();
 }

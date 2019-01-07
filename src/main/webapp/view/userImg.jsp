@@ -8,7 +8,7 @@
 <div id="main1" style="width: 600px;height:400px;"></div>
 
 <script type="text/javascript">
-    var myChart = echarts.init(document.getElementById('main1'));
+    var myChart1 = echarts.init(document.getElementById('main1'));
 
     var option = {
         title: {
@@ -73,14 +73,14 @@
             }
         ]
     };
-    myChart.setOption(option);
+    myChart1.setOption(option);
     $.ajax({
         type: "POST",
         url: "${pageContext.request.contextPath}/user/queryProvinces",
         data: "sex=男",
         dataType: "JSON",
         success: function (result) {
-            myChart.setOption({
+            myChart1.setOption({
                 series: [
                     {data: result.data}, {}
                 ]
@@ -94,11 +94,47 @@
         dataType: "JSON",
         success: function (result) {
             console.log(result);
-            myChart.setOption({
+            myChart1.setOption({
                 series: [
                     {}, {data: result.data}
                 ]
             })
         }
     })
+    var goEasy1 = new GoEasy({
+        appkey: "BC-ee3c1f1bd50d4fc58d6b27a4770bd432"
+    });
+    goEasy1.subscribe({
+        channel: "person",
+        onMessage: function (message) {
+            var ss = eval("(" + message.content + ")");
+            console.log(ss);
+            myChart1.setOption({
+                series: [
+                    {data: ss.man}, {data: ss.wom}
+                ]
+            })
+        }
+    });
+    $(function () {
+        $("#button1").linkbutton({
+            iconCls: "icon-add",
+            onClick: function () {
+                console.log($("#test1").val());
+                var goEasy = new GoEasy({
+                    appkey: "BC-ee3c1f1bd50d4fc58d6b27a4770bd432"
+                });
+                goEasy.publish({
+
+                    channel: "140",
+                    message: $("#test1").val()
+                });
+            }
+        });
+
+    });
+
+
+
 </script>
+<input id="test1" type="text"/><input type="button" id="button1" value="发送"/>

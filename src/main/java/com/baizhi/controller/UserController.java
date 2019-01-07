@@ -4,11 +4,13 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
+import com.alibaba.fastjson.JSONObject;
 import com.baizhi.entity.Province;
 import com.baizhi.entity.User;
 import com.baizhi.entity.UserData;
 import com.baizhi.entity.UserMessage;
 import com.baizhi.service.UserService;
+import io.goeasy.GoEasy;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,21 @@ public class UserController {
         return data;
     }
 
+    @RequestMapping("/queryAllPro")
+    public Map<String, List<Province>> queryAllPro(String sex) {
+        Map<String, List<Province>> map1 = null;
+        if (sex.equals("女")) {
+            map1 = userService.queryProWom();
+        }
+        if (sex.equals("男")) {
+            map1 = userService.queryProMan();
+        }
+        System.out.println(JSONObject.toJSONString(map1) + "--------");
+        GoEasy goEasy = new GoEasy("http://rest-hangzhou.goeasy.io", "BC-ee3c1f1bd50d4fc58d6b27a4770bd432");
+        goEasy.publish("140", JSONObject.toJSONString(map1));
+        return map1;
+    }
+
     @RequestMapping("/queryProvinces")
     public Map<String, List<Province>> queryProvinces(String sex) {
         Map<String, List<Province>> map = null;
@@ -54,7 +71,10 @@ public class UserController {
 
     @RequestMapping("updateOne")
     public void updateOne(User u) {
+
         userService.updateOne(u);
+
+
     }
 
     @RequestMapping("out")

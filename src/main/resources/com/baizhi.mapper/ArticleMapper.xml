@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.mapper.ArticleDao">
+    <resultMap id="res1" type="com.baizhi.entity.Article">
+        <id column="aid" property="id"/>
+        <result column="title" property="title"></result>
+        <result column="insert_img" property="insertImg"></result>
+        <result column="content" property="content"></result>
+        <result column="pub_date" property="pubDate"></result>
+        <collection property="g" ofType="com.baizhi.entity.Gurn">
+            <id column="gid" property="id"/>
+            <result column="dharma" property="dharma"></result>
+            <result column="head_pic" property="headPic"></result>
+            <result column="status" property="status"></result>
+        </collection>
+    </resultMap>
+
+    <select id="queryAllArti" parameterType="java.lang.Integer" resultType="com.baizhi.entity.StuMess">
+        select a.insert_img thumbnail,
+               g.dharma     author,
+               a.title,
+               a.pud_date   create_date
+        from article a
+                 left join gurn g on a.gid = g.id
+        where a.gid = #{gid}
+    </select>
+    <select id="querySomeArti" parameterType="java.lang.Integer" resultType="com.baizhi.entity.StuMess">
+        select a.insert_img thumbnail,
+               g.dharma     author,
+               a.title,
+               a.pub_date   create_date
+        from article a
+                 left join gurn g on a.gid = g.id
+        where a.gid = #{gid}
+        order by a.pub_date desc limit 0,2
+    </select>
+    <select id="queryOtherArti" parameterType="java.lang.Integer" resultType="com.baizhi.entity.StuMess">
+        select a.insert_img thumbnail,
+               g.dharma     author,
+               a.title,
+               a.pub_date   create_date
+        from article a
+                 left join gurn g on a.gid = g.id
+        where a.gid!=#{gid}
+        order by a.pub_date desc limit 0,2
+    </select>
+    <select id="querySomeArticle" resultMap="res1">
+        select a.id aid,
+               a.title,
+               a.insert_img,
+               a.content,
+               a.pub_date,
+               g.id gid,
+               g.dharma,
+               g.head_pic,
+               g.status
+        from article a
+                 left join gurn g on a.gid = g.id
+        order by a.id desc limit ${(page-1)*rows},${rows}
+    </select>
+    <insert id="insertOneArti" useGeneratedKeys="true" keyProperty="id" parameterType="com.baizhi.entity.Article">
+        insert into article(title, insert_img, content, pub_date, gid)
+        values (#{title}, #{insertImg}, #{content}, #{pubDate}, #{g.id})
+    </insert>
+</mapper>

@@ -39,4 +39,23 @@
             })
         }
     })
+    var goEasy = new GoEasy({
+        appkey: "BC-ee3c1f1bd50d4fc58d6b27a4770bd432"
+    });
+    goEasy.subscribe({
+        channel: "cmfz",
+        onMessage: function (message) {
+            var ss = eval(message.content);
+            console.log(ss);
+            myChart.setOption({
+                series: [{
+                    // 根据名字对应到相应的系列
+                    name: '注册数',
+                    data: ss,
+                    //显示为柱状图
+                    type: "bar"
+                }]
+            })
+        }
+    });
 </script>
